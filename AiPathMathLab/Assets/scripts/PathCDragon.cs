@@ -1,8 +1,7 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OtherPController : MonoBehaviour
+public class PathCDragon : MonoBehaviour
 {
     [SerializeField]
     public pathManager pathManager;
@@ -13,12 +12,11 @@ public class OtherPController : MonoBehaviour
     public float MoveSpeed, RotateSpeed;
 
     public Animator animator;
-    [SerializeField] bool isWalking;
-    [SerializeField] bool isBlocked = false;
+    bool isWalking, isBlocked;
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
 
         isWalking = false;
         animator.SetBool("IsWalking", isWalking);
@@ -59,7 +57,7 @@ public class OtherPController : MonoBehaviour
     private void Update()
     {
 
-        if (Input.anyKeyDown && isBlocked == false)
+        if (Input.anyKeyDown)
         {
             //toggle if any key is pressed
             isWalking = !isWalking;
@@ -72,24 +70,40 @@ public class OtherPController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        //switch to next target
-        target = pathManager.GetNextTarget();
         Debug.Log(other);
+
+        if (other.gameObject.CompareTag("point"))
+        {
+            //switch to next target
+            target = pathManager.GetNextTarget();
+            Debug.Log("Dragon hits point");
+        }
 
         if (other.gameObject.CompareTag("object"))
         {
-            Debug.Log("collision");
             isBlocked = true;
         }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.gameObject.CompareTag("point"))
+        {
+            //switch to next target
+            target = pathManager.GetNextTarget();
+            Debug.Log("Dragon hits point");
+        }
+
         if (other.gameObject.CompareTag("object"))
         {
-            Debug.Log("left collision");
             isBlocked = false;
         }
     }

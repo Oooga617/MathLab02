@@ -54,6 +54,7 @@ public class pathManager : MonoBehaviour
 
     public wayPoint GetNextTarget()
     {
+        Debug.Log("getting next point");
         int nextPointIndex = (currentPointIndex + 1) % (path.Count);
         currentPointIndex = nextPointIndex;
         return path[nextPointIndex];

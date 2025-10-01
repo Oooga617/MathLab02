@@ -17,7 +17,7 @@ public class PathController : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
 
         isWalking = false;
         animator.SetBool("IsWalking", isWalking);
@@ -71,9 +71,19 @@ public class PathController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        //switch to next target
-        target = pathManager.GetNextTarget();
+        if (other.gameObject.CompareTag("point"))
+        {
+            //switch to next target
+            target = pathManager.GetNextTarget();
+            Debug.Log("knight hits point");
+        }
+        
     }
 }
